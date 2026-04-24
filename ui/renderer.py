@@ -56,7 +56,7 @@ class Renderer:
         self.screen.fill(self.colors["background"])
         width, _ = self.screen.get_size()
 
-        title = self.title_font.render("Silent Front Setup", True, self.colors["text"])
+        title = self.title_font.render("Tile Wars Setup", True, self.colors["text"])
         self.screen.blit(title, title.get_rect(center=(width // 2, 60)))
 
         setup_lines = [

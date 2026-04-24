@@ -22,7 +22,7 @@ def main():
     height = 850
 
     screen = pygame.display.set_mode((width, height), pygame.RESIZABLE)
-    pygame.display.set_caption("Silent Front")
+    pygame.display.set_caption("Tile Wars")
 
     renderer = Renderer(screen, tile_size)
 
