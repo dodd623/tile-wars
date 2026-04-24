@@ -1,12 +1,11 @@
 class Tile:
-    def __init__(self, x, y, owner=None, units=0):
+    def __init__(self, x, y, owner=None):
         self.x = x
         self.y = y
-        self.owner = owner  # None, 0 (player), 1 (AI)
-        self.units = units
+        self.owner = owner
 
     def __repr__(self):
-        return f"Tile({self.x}, {self.y}, owner={self.owner}, units={self.units})"
+        return f"Tile({self.x}, {self.y}, owner={self.owner})"
 
 
 class Grid:
@@ -24,14 +23,10 @@ class Grid:
         return None
 
     def get_neighbors(self, x, y):
-        directions = [
-            (0, -1),  # up
-            (0, 1),   # down
-            (-1, 0),  # left
-            (1, 0),   # right
-        ]
+        directions = [(0, -1), (0, 1), (-1, 0), (1, 0)]
 
         neighbors = []
+
         for dx, dy in directions:
             neighbor = self.get_tile(x + dx, y + dy)
             if neighbor:
@@ -39,11 +34,32 @@ class Grid:
 
         return neighbors
 
-    def initialize_players(self):
-        # Player 0 (human)
-        self.get_tile(0, 0).owner = 0
-        self.get_tile(0, 0).units = 5
+    def initialize_players(self, num_players=2):
+        starting_positions = [
+            (0, 0),
+            (self.width - 1, self.height - 1),
+            (self.width - 1, 0),
+            (0, self.height - 1),
+            (self.width // 2, 0),
+            (self.width // 2, self.height - 1),
+            (0, self.height // 2),
+            (self.width - 1, self.height // 2),
+        ]
 
-        # Player 1 (AI)
-        self.get_tile(self.width - 1, self.height - 1).owner = 1
-        self.get_tile(self.width - 1, self.height - 1).units = 5
+        for player_id in range(num_players):
+            x, y = starting_positions[player_id]
+            tile = self.get_tile(x, y)
+            tile.owner = player_id
+
+    def count_owned_tiles(self):
+        tile_counts = {}
+
+        for row in self.tiles:
+            for tile in row:
+                if tile.owner is not None:
+                    tile_counts[tile.owner] = tile_counts.get(tile.owner, 0) + 1
+
+        return tile_counts
+
+    def total_tiles(self):
+        return self.width * self.height
